@@ -2,18 +2,16 @@ package academy.investmais.model.people;
 
 import academy.investmais.enums.AccountType;
 
-public class User extends Account {
+public class User {
     private long userID;
     private String name;
     private String email;
     private String password;
 
-    public User(AccountType accountType, String name, String email) {
-        super(accountType);
+    public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
-        super.setPrimaryOwner(this);
-        super.addUser(this);
+        this.password = password;
     }
 
     public String getPassword() {
@@ -38,10 +36,5 @@ public class User extends Account {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return this.name;
     }
 }

@@ -6,15 +6,16 @@ import academy.investmais.enums.AccountType;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Account {
+public class Account {
     private long accountID;
     private User primaryOwner;
     private AccountStatus accountStatus;
     private AccountType accountType;
     private List<User> users = new ArrayList<>();
 
-    public Account(AccountType accountType) {
+    public Account(AccountType accountType, User primaryOwner) {
         this.accountType = accountType;
+        this.primaryOwner = primaryOwner;
     }
 
     public AccountType getAccountType() {
@@ -35,6 +36,10 @@ public abstract class Account {
 
     public void setPrimaryOwner(User user) {
         this.primaryOwner = user;
+    }
+
+    public User getPrimaryOwner() {
+        return primaryOwner;
     }
 
     public List<User> getUsers() {

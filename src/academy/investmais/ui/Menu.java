@@ -3,6 +3,8 @@ package academy.investmais.ui;
 import academy.investmais.enums.AccountType;
 import academy.investmais.model.people.Account;
 import academy.investmais.model.people.User;
+import academy.investmais.repository.AccountRepository;
+import academy.investmais.repository.UserRepository;
 
 import java.util.Scanner;
 
@@ -25,15 +27,19 @@ public class Menu {
             Iniciando sistema...
             """;
     private String menu = """
-            ---------------- MENU ----------------
+            ---------------- MENU TESTE ----------------
             1 - Para exibir o menu novamente
             2 - Criar Conta
-            3 - Consultar Saldo
-            4 - Realizar Investimento
+            3 - Testar os repositórios
+            4 - Consultar Saldo
+            5 - Realizar Investimento
             0 - Sair
             Escolha uma opção:
             
             """;
+
+    private AccountRepository accountsDatabase = new AccountRepository();
+    private UserRepository userDatabase = new UserRepository();
 
     public void displayMainMenu() {
         option = -1;
@@ -53,6 +59,28 @@ public class Menu {
                 break;
             case 2:
                 menuCreateAccount();
+                break;
+            case 3:
+                // somente para testar os repositorios
+                System.out.println("Para testar os repositórios\n");
+                if (userDatabase.getUsersDatabase().isEmpty()) {
+                    System.out.println("Nenhum usuário encontrado.");
+                } else {
+                    System.out.println("\n--- USUÁRIOS CADASTRADAS ---");
+                    for (User u : userDatabase.getUsersDatabase()) {
+                        System.out.println(" | Nome: " + u.getName() + " | Email: " + u.getEmail());
+                    }
+                }
+
+                if (accountsDatabase.getAccountsDatabase().isEmpty()) {
+                    System.out.println("Nenhum conta encontrado.");
+                } else {
+                    System.out.println("\n--- CONTAS CADASTRADAS ---");
+                    for (Account acc : accountsDatabase.getAccountsDatabase()) {
+                        System.out.println("Tipo: " + acc.getAccountType() + " | Dono: " + acc.getPrimaryOwner().getName());
+                    }
+                }
+
                 break;
             case 0:
                 System.out.println("\nEncessando sistema...");
@@ -77,6 +105,9 @@ public class Menu {
         User newUser = new User(name, email, password);
         Account newAccount = new Account(type, newUser);
         newAccount.addUser(newUser);
+
+        accountsDatabase.addAccountOnDatabase(newAccount);
+        userDatabase.addUserOnDatabase(newUser);
 
         System.out.println("Conta criada com sucesso!\n");
     }

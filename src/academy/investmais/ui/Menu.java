@@ -5,6 +5,7 @@ import academy.investmais.model.people.Account;
 import academy.investmais.model.people.User;
 import academy.investmais.repository.AccountRepository;
 import academy.investmais.repository.UserRepository;
+import academy.investmais.service.AuthService;
 
 import java.util.Scanner;
 
@@ -26,61 +27,97 @@ public class Menu {
             
             Iniciando sistema...
             """;
-    private String menu = """
+    private String mainMenu = """
             ---------------- MENU TESTE ----------------
             1 - Para exibir o menu novamente
-            2 - Criar Conta
-            3 - Testar os repositórios
-            4 - Consultar Saldo
-            5 - Realizar Investimento
-            0 - Sair
+            2 - Consultar Saldo
+            3 - Realizar Investimento
+            4 - Logout
+            0 - Encerrar aplicação
             Escolha uma opção:
+            
+            """;
+    private String authMenu = """
+            --------------- AUTENTICAÇÃO ---------------
+            
+            Você ainda não possui cadastrado?
+            1 - Se cadastrar
+            
+            Você já possui cadastro?
+            2 - Login
+            
+            Deseja encerrar a aplicação?
+            0 - Encerrar
             
             """;
 
     private AccountRepository accountsDatabase = new AccountRepository();
     private UserRepository userDatabase = new UserRepository();
+    private static AuthService auth = new AuthService();
 
-    public void displayMainMenu() {
-        option = -1;
+    public void runMenu() {
         System.out.println(presentation);
-        System.out.println(menu);
+        option = -1;
+        boolean systemRunning = true;
+
+        while (systemRunning) {
+            if (!auth.isAuthenticated()) {
+                displayAuthMenu();
+                if (option == 0) systemRunning = false;
+            } else {
+                displayMainMenu();
+                if (option == 0 && auth.isAuthenticated()) systemRunning = false;
+            }
+        }
+    }
+
+    private void displayAuthMenu() {
+        while (!auth.isAuthenticated() && option != 0) {
+            System.out.println(authMenu);
+            System.out.print("Escolha: ");
+            option = scanner.nextInt();
+
+            switch (option) {
+                case 1:
+                    menuCreateAccount();
+                    break;
+                case 2:
+                    menuLoggin();
+                    break;
+                case 0:
+                    System.out.println("Encerrando...");
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
+            }
+        }
+    }
+
+    private void displayMainMenu() {
+        option = -1;
+        System.out.println(mainMenu);
 
          while (option != 0) {
              option = scanner.nextInt();
-             processOption(option);
+             mainProcessOption(option);
          }
     }
 
-    private void processOption(int option) {
+    private void mainProcessOption(int option) {
         switch (option) {
             case 1:
-                System.out.println(menu);
+                System.out.println(mainMenu);
                 break;
             case 2:
-                menuCreateAccount();
+                System.out.println("Estamos desenvolvendo - Consultar Saldo");
                 break;
             case 3:
-                // somente para testar os repositorios
-                System.out.println("Para testar os repositórios\n");
-                if (userDatabase.getUsersDatabase().isEmpty()) {
-                    System.out.println("Nenhum usuário encontrado.");
-                } else {
-                    System.out.println("\n--- USUÁRIOS CADASTRADAS ---");
-                    for (User u : userDatabase.getUsersDatabase()) {
-                        System.out.println(" | Nome: " + u.getName() + " | Email: " + u.getEmail());
-                    }
-                }
-
-                if (accountsDatabase.getAccountsDatabase().isEmpty()) {
-                    System.out.println("Nenhum conta encontrado.");
-                } else {
-                    System.out.println("\n--- CONTAS CADASTRADAS ---");
-                    for (Account acc : accountsDatabase.getAccountsDatabase()) {
-                        System.out.println("Tipo: " + acc.getAccountType() + " | Dono: " + acc.getPrimaryOwner().getName());
-                    }
-                }
-
+                System.out.println("Estamos desenvolvendo - Realizar Investimento");
+                break;
+            case 4:
+                System.out.println("Desconectando usuário...");
+                auth.logout();
+                displayAuthMenu();
                 break;
             case 0:
                 System.out.println("\nEncessando sistema...");
@@ -110,5 +147,20 @@ public class Menu {
         userDatabase.addUserOnDatabase(newUser);
 
         System.out.println("Conta criada com sucesso!\n");
+    }
+
+    private void menuLoggin() {
+        System.out.println("--------------- LOGIN ---------------");
+        System.out.println("Email: ");
+        String email = scanner.next();
+
+        System.out.println("Senha: ");
+        String password = scanner.next();
+
+        if(auth.login(email, password)) {
+            System.out.println("Login efetuado com sucesso!");
+        } else {
+            System.out.println("Algo deu errado!");
+        }
     }
 }

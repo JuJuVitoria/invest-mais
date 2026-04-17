@@ -15,4 +15,11 @@ public class UserRepository {
     public void addUserOnDatabase(User user) {
         usersDatabase.add(user);
     }
+
+    public User findUserByEmail(String email) {
+        return usersDatabase.stream()
+                .filter(user -> user.getEmail().equals(email))
+                .findFirst()
+                .orElse(null);
+    }
 }

@@ -3,6 +3,7 @@ package academy.investmais.ui.processes;
 import academy.investmais.enums.AccountType;
 import academy.investmais.model.people.Account;
 import academy.investmais.model.people.User;
+import academy.investmais.model.people.Wallet;
 import academy.investmais.repository.AccountRepository;
 import academy.investmais.repository.UserRepository;
 
@@ -35,6 +36,8 @@ public class AccountCreationProcess {
         User newUser = new User(name, email, password);
         //Criando Account
         Account newAccount = new Account(type, newUser);
+        //Criando Wallet
+        Wallet newWallet = new Wallet(newUser.getUserID());
 
         //Para salvar no banco de dados improvisado
         userDatabase.addUserOnDatabase(newUser);

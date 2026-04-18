@@ -24,7 +24,7 @@ public class MenuLoginProcess {
         if(auth.login(email, password)) {
             System.out.println("Login efetuado com sucesso!");
         } else {
-            System.out.println("Algo deu errado!");
+            System.out.println("Senha ou email incorreto!");
         }
     }
 }

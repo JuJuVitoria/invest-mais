@@ -1,11 +1,11 @@
 package academy.investmais.ui;
 
 import academy.investmais.enums.AccountType;
-import academy.investmais.model.people.Account;
-import academy.investmais.model.people.User;
 import academy.investmais.repository.AccountRepository;
 import academy.investmais.repository.UserRepository;
 import academy.investmais.service.AuthService;
+import academy.investmais.ui.processes.AccountCreationProcess;
+import academy.investmais.ui.processes.MenuLoginProcess;
 
 import java.util.Scanner;
 
@@ -51,9 +51,9 @@ public class Menu {
             
             """;
 
+    private static AuthService auth = new AuthService();
     private AccountRepository accountsDatabase = new AccountRepository();
     private UserRepository userDatabase = new UserRepository();
-    private static AuthService auth = new AuthService();
 
     public void runMenu() {
         System.out.println(presentation);
@@ -79,10 +79,12 @@ public class Menu {
 
             switch (option) {
                 case 1:
-                    menuCreateAccount();
+                    AccountCreationProcess accountCreation = new AccountCreationProcess(this.accountsDatabase, this.userDatabase);
+                    accountCreation.menuCreateAccount();
                     break;
                 case 2:
-                    menuLoggin();
+                    MenuLoginProcess loginProcess = new MenuLoginProcess(auth);
+                    loginProcess.menuLogin();
                     break;
                 case 0:
                     System.out.println("Encerrando...");
@@ -124,43 +126,6 @@ public class Menu {
                 break;
             default:
                 System.out.println("Opção inválida!");
-        }
-    }
-
-    private void menuCreateAccount() {
-        System.out.print("Digite o nome do usuário: ");
-        String name = scanner.next();
-        System.out.print("Digite seu email: ");
-        String email = scanner.next();
-        System.out.print("Digite sua senha: ");
-        String password = scanner.next();
-
-        System.out.print("Qual o tipo da sua conta?\n 1 - PERSONAL\n 2 - BUSINESS \n");
-        int accountTypeOption = scanner.nextInt();
-        AccountType type = (accountTypeOption == 1) ? AccountType.PERSONAL : AccountType.BUSINESS;
-
-        User newUser = new User(name, email, password);
-        Account newAccount = new Account(type, newUser);
-        newAccount.addUser(newUser);
-
-        accountsDatabase.addAccountOnDatabase(newAccount);
-        userDatabase.addUserOnDatabase(newUser);
-
-        System.out.println("Conta criada com sucesso!\n");
-    }
-
-    private void menuLoggin() {
-        System.out.println("--------------- LOGIN ---------------");
-        System.out.println("Email: ");
-        String email = scanner.next();
-
-        System.out.println("Senha: ");
-        String password = scanner.next();
-
-        if(auth.login(email, password)) {
-            System.out.println("Login efetuado com sucesso!");
-        } else {
-            System.out.println("Algo deu errado!");
         }
     }
 }

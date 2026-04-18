@@ -12,7 +12,7 @@ public class UserRepository {
         return usersDatabase;
     }
 
-    public void addUserOnDatabase(User user) {
+    public static void addUserOnDatabase(User user) {
         usersDatabase.add(user);
     }
 

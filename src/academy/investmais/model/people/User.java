@@ -2,16 +2,21 @@ package academy.investmais.model.people;
 
 import academy.investmais.enums.AccountType;
 
+import java.util.UUID;
+
 public class User {
-    private long userID;
+    private String userID;
+    private String accountID;
     private String name;
     private String email;
     private String password;
 
-    public User(String name, String email, String password) {
+    public User(String name, String email, String password, String accountID) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.userID = UUID.randomUUID().toString();
+        this.accountID = accountID;
     }
 
     public String getPassword() {
@@ -37,4 +42,6 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getUserID() { return userID; }
 }

@@ -2,25 +2,28 @@ package academy.investmais.model.people;
 
 import academy.investmais.enums.AccountStatus;
 import academy.investmais.enums.AccountType;
+import academy.investmais.repository.AccountRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Account {
-    private long accountID;
-    private User primaryOwner;
+    private String accountID;
+    private String iDprimaryOwner;
     private AccountStatus accountStatus;
     private AccountType accountType;
     private List<User> users = new ArrayList<>();
 
-    public Account(AccountType accountType, User primaryOwner) {
+    public Account(AccountType accountType) {
         this.accountType = accountType;
-        this.primaryOwner = primaryOwner;
+        this.accountID = UUID.randomUUID().toString();
     }
 
     public AccountType getAccountType() {
         return this.accountType;
     }
+    public String getAccountID() { return accountID; }
 
     public void addUser(User user) {
         if (this.accountType == AccountType.PERSONAL) {
@@ -34,12 +37,12 @@ public class Account {
         }
     }
 
-    public void setPrimaryOwner(User user) {
-        this.primaryOwner = user;
+    public void setiDPrimaryOwner(String userID) {
+        this.iDprimaryOwner = userID;
     }
 
-    public User getPrimaryOwner() {
-        return primaryOwner;
+    public String getiDPrimaryOwner() {
+        return iDprimaryOwner;
     }
 
     public List<User> getUsers() {

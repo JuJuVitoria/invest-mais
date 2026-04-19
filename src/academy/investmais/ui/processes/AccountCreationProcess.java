@@ -32,10 +32,10 @@ public class AccountCreationProcess {
         int opt = scanner.nextInt();
         AccountType type = (opt == 1) ? AccountType.PERSONAL : AccountType.BUSINESS;
 
-        //Criando user
-        User newUser = new User(name, email, password);
-        //Criando Account
-        Account newAccount = new Account(type, newUser);
+        Account newAccount = new Account(type);
+        User newUser = new User(name, email, password, newAccount.getAccountID());
+        newAccount.setiDPrimaryOwner(newUser.getUserID());
+
         //Criando Wallet
         Wallet newWallet = new Wallet(newUser.getUserID());
 

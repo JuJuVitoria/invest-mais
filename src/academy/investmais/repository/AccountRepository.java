@@ -11,9 +11,11 @@ public class AccountRepository {
     private List<Account> accountsDatabase = new ArrayList<>();
 
     public AccountRepository() {
-        User usuarioTeste = new User("Teste", "teste@email.com", "123");
+        Account contaTeste = new Account(AccountType.PERSONAL);
+        User usuarioTeste = new User("Teste", "teste@email.com", "123", contaTeste.getAccountID());
+        contaTeste.setiDPrimaryOwner(usuarioTeste.getUserID());
         UserRepository.addUserOnDatabase(usuarioTeste);
-        Account contaTeste = new Account(AccountType.PERSONAL, usuarioTeste);
+
         accountsDatabase.add(contaTeste);
     }
 

@@ -15,6 +15,10 @@ public abstract class Asset {
         this.currentValeu = currentValeu;
     }
 
+    public String getAssetTicker() {
+        return assetTicker;
+    }
+
     public double getCurrentValeu() {
         return currentValeu;
     }

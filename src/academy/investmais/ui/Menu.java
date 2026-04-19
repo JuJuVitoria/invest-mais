@@ -2,7 +2,9 @@ package academy.investmais.ui;
 
 import academy.investmais.enums.AccountType;
 import academy.investmais.repository.AccountRepository;
+import academy.investmais.repository.AssetRepository;
 import academy.investmais.repository.UserRepository;
+import academy.investmais.repository.WalletRepository;
 import academy.investmais.service.AuthService;
 import academy.investmais.ui.processes.AccountCreationProcess;
 import academy.investmais.ui.processes.MenuLoginProcess;
@@ -12,21 +14,6 @@ import java.util.Scanner;
 public class Menu {
     private Scanner scanner = new Scanner(System.in);
     private int option;
-    private String presentation = """
-            ------------ INVEST MAIS -------------
-            Este é um trabalha realizado durante estudados da FIAP...
-            
-            Integrantes
-            - Julia Vitoria da Luz
-            - Rafael Costa dos Santos
-            - Murillo Mendes Rodrigues
-            - Michael Stephan Silva Gebenlian
-            - Alvaro Gama Bastos Rangel
-            
-            Esperamos que você goste!!
-            
-            Iniciando sistema...
-            """;
     private String mainMenu = """
             ---------------- MENU TESTE ----------------
             1 - Para exibir o menu novamente
@@ -52,11 +39,27 @@ public class Menu {
             """;
 
     private static AuthService auth = new AuthService();
-    private AccountRepository accountsDatabase = new AccountRepository();
     private UserRepository userDatabase = new UserRepository();
+    private AccountRepository accountsDatabase = new AccountRepository();
+    private WalletRepository walletDatabase = new WalletRepository();
 
     public void runMenu() {
-        System.out.println(presentation);
+        System.out.println("""
+                ------------ INVEST MAIS -------------
+                Este é um trabalha realizado durante estudados da FIAP...
+            
+                Integrantes
+                - Julia Vitoria da Luz
+                - Rafael Costa dos Santos
+                - Murillo Mendes Rodrigues
+                - Michael Stephan Silva Gebenlian
+                - Alvaro Gama Bastos Rangel
+            
+                Esperamos que você goste!!
+            
+                Iniciando sistema...
+                
+                """);
         option = -1;
         boolean systemRunning = true;
 
@@ -71,6 +74,37 @@ public class Menu {
         }
     }
 
+    private void displayInvestmentMenu() {
+        int investmentOption = -1;
+
+        while (investmentOption != 0) {
+            System.out.println("""
+                --------------- ÁREA DE INVESTIMENTOS ---------------
+                1 - Ver minha carteira (Meus Ativos)
+                2 - Explorar Mercado (Investir)
+                0 - Voltar ao Menu Principal
+                -----------------------------------------------------
+                """);
+            System.out.print("Escolha uma opção: ");
+            investmentOption = scanner.nextInt();
+
+            switch (investmentOption) {
+                case 1:
+                    System.out.println("Exibindo sua Wallet e ativos...");
+                    break;
+                case 2:
+                    System.out.println("Listando ativos do AssetRepository...");
+
+                    break;
+                case 0:
+                    System.out.println("Voltando...");
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
+            }
+        }
+    }
+
     private void displayAuthMenu() {
         while (!auth.isAuthenticated() && option != 0) {
             System.out.println(authMenu);
@@ -79,7 +113,7 @@ public class Menu {
 
             switch (option) {
                 case 1:
-                    AccountCreationProcess accountCreation = new AccountCreationProcess(this.accountsDatabase, this.userDatabase);
+                    AccountCreationProcess accountCreation = new AccountCreationProcess(this.accountsDatabase, this.userDatabase, this.walletDatabase);
                     accountCreation.menuCreateAccount();
                     break;
                 case 2:
@@ -114,7 +148,8 @@ public class Menu {
                 System.out.println("Estamos desenvolvendo - Consultar Saldo");
                 break;
             case 3:
-                System.out.println("Estamos desenvolvendo - Realizar Investimento");
+                displayInvestmentMenu();
+                System.out.println(mainMenu);
                 break;
             case 4:
                 System.out.println("Desconectando usuário...");

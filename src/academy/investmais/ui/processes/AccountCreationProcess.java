@@ -6,6 +6,7 @@ import academy.investmais.model.people.User;
 import academy.investmais.model.people.Wallet;
 import academy.investmais.repository.AccountRepository;
 import academy.investmais.repository.UserRepository;
+import academy.investmais.repository.WalletRepository;
 
 import java.util.Scanner;
 
@@ -14,10 +15,12 @@ public class AccountCreationProcess {
 
     private AccountRepository accountsDatabase;
     private UserRepository userDatabase;
+    private WalletRepository walletDatabase;
 
-    public AccountCreationProcess(AccountRepository accountsDatabase, UserRepository userDatabase) {
+    public AccountCreationProcess(AccountRepository accountsDatabase, UserRepository userDatabase, WalletRepository walletDatabase) {
         this.accountsDatabase = accountsDatabase;
         this.userDatabase = userDatabase;
+        this.walletDatabase = walletDatabase;
     }
 
     public void menuCreateAccount() {
@@ -32,8 +35,13 @@ public class AccountCreationProcess {
         int opt = scanner.nextInt();
         AccountType type = (opt == 1) ? AccountType.PERSONAL : AccountType.BUSINESS;
 
+        //Cria Account
         Account newAccount = new Account(type);
+
+        //Cria User
         User newUser = new User(name, email, password, newAccount.getAccountID());
+
+        //Passa o novo Usuário como o dono da nova conta
         newAccount.setiDPrimaryOwner(newUser.getUserID());
 
         //Criando Wallet
@@ -42,6 +50,7 @@ public class AccountCreationProcess {
         //Para salvar no banco de dados improvisado
         userDatabase.addUserOnDatabase(newUser);
         accountsDatabase.addAccountOnDatabase(newAccount);
+        walletDatabase.addWalletOnDatabase(newWallet);
 
         System.out.println("Conta " + type + " criada com sucesso!");
     }

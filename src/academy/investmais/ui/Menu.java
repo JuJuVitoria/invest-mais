@@ -1,6 +1,7 @@
 package academy.investmais.ui;
 
 import academy.investmais.enums.AccountType;
+import academy.investmais.model.people.Wallet;
 import academy.investmais.repository.AccountRepository;
 import academy.investmais.repository.AssetRepository;
 import academy.investmais.repository.UserRepository;
@@ -74,6 +75,42 @@ public class Menu {
         }
     }
 
+    private void displayAssets() {
+         System.out.println("""
+               1 - Ações
+               2 - Criptomoedas
+               3 - Fundos
+               4 - CDI/CDB
+         """);
+
+         option = scanner.nextInt();
+
+         var user = auth.getLoggedUser();
+         Wallet wallet = new Wallet(user.getUserID(), 1000);
+
+         switch (option) {
+             case 1:
+                 wallet.setName("Ações");
+                 walletDatabase.addWalletOnDatabase(wallet);
+                 break;
+             case 2:
+                 wallet.setName("Criptomoedas");
+                 walletDatabase.addWalletOnDatabase(wallet);
+                 break;
+             case 3:
+                 wallet.setName("Fundos");
+                 walletDatabase.addWalletOnDatabase(wallet);
+                 break;
+             case 4:
+                 wallet.setName("CDI/CDB");
+                 walletDatabase.addWalletOnDatabase(wallet);
+                 break;
+             default:
+
+                 break;
+         }
+    }
+
     private void displayInvestmentMenu() {
         int investmentOption = -1;
 
@@ -94,7 +131,7 @@ public class Menu {
                     break;
                 case 2:
                     System.out.println("Listando ativos do AssetRepository...");
-
+                    displayAssets();
                     break;
                 case 0:
                     System.out.println("Voltando...");
@@ -103,6 +140,21 @@ public class Menu {
                     System.out.println("Opção inválida!");
             }
         }
+    }
+
+    private void displayBalance() {
+        var wallets = this.walletDatabase.getWalletDatabase();
+
+        System.out.println("Consultando wallets...\n\n");
+        wallets.forEach(wallet -> {
+            System.out.print("Wallet ID: ");
+            System.out.println(wallet.getWalletID());
+            System.out.print("Nome do Investimento: ");
+            System.out.println(wallet.getName());
+            System.out.print("Saldo: ");
+            System.out.println(wallet.getBalance());
+            System.out.println("\n");
+        });
     }
 
     private void displayAuthMenu() {
@@ -145,7 +197,8 @@ public class Menu {
                 System.out.println(mainMenu);
                 break;
             case 2:
-                System.out.println("Estamos desenvolvendo - Consultar Saldo");
+                displayBalance();
+                System.out.println(mainMenu);
                 break;
             case 3:
                 displayInvestmentMenu();

@@ -18,7 +18,6 @@ public class WalletRepository {
     private void mockWallets() {
         var accounts = this.accountDatabase.getAccountsDatabase();
 
-        //Wallet newWallet = new Wallet(accountDatabase.getAccountsDatabase());
     }
 
     public void addWalletOnDatabase(Wallet wallet) {

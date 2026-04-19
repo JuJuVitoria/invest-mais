@@ -45,12 +45,16 @@ public class AccountCreationProcess {
         newAccount.setiDPrimaryOwner(newUser.getUserID());
 
         //Criando Wallet
-        Wallet newWallet = new Wallet(newUser.getUserID());
+        Wallet newWallet = new Wallet(newUser.getUserID(), 25000, "CDI/CDB");
+        Wallet newWallet2 = new Wallet(newUser.getUserID(), 10000, "Fundos");
 
         //Para salvar no banco de dados improvisado
         userDatabase.addUserOnDatabase(newUser);
+
         accountsDatabase.addAccountOnDatabase(newAccount);
+
         walletDatabase.addWalletOnDatabase(newWallet);
+        walletDatabase.addWalletOnDatabase(newWallet2);
 
         System.out.println("Conta " + type + " criada com sucesso!");
     }

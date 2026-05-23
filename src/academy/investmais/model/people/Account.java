@@ -44,6 +44,25 @@ public class Account {
     public String getiDPrimaryOwner() {
         return iDprimaryOwner;
     }
+    public void setAccountID(String accountID) {
+        this.accountID = accountID;
+    }
+
+    public AccountStatus getAccountStatus() {
+        return accountStatus;
+    }
+
+    public void setAccountStatus(AccountStatus accountStatus) {
+        this.accountStatus = accountStatus;
+    }
+
+    public void setAccountType(AccountType accountType) {
+        this.accountType = accountType;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
 
     public List<User> getUsers() {
         return this.users;

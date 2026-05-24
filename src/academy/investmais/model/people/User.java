@@ -42,6 +42,16 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
+    public String getAccountID() {
+        return accountID;
+    }
 
+    public void setAccountID(String accountID) {
+        this.accountID = accountID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
     public String getUserID() { return userID; }
 }

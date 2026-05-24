@@ -1,5 +1,6 @@
 package academy.investmais.model.people;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -8,7 +9,7 @@ public class Wallet {
     private String userID;
     private String name;
     private long totalBalance;
-    private Map<String, Double> assets;
+    private Map<String, Double> assets = new HashMap<>();
 
     public Wallet(String userID) {
         walletID = UUID.randomUUID().toString();
@@ -48,6 +49,25 @@ public class Wallet {
 
     public void setName(String name) {
         this.name = name;
+    }
+    public void setWalletID(String walletID) {
+        this.walletID = walletID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+    public void setBalance(long totalBalance) {
+        this.totalBalance = totalBalance;
+    }
+
+    public Map<String, Double> getAssets() {
+        return assets;
+    }
+
+    public void setAssets(Map<String, Double> assets) {
+        this.assets = assets;
     }
 
     public String getName() { return name; }

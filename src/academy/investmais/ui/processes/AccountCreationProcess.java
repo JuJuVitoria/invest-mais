@@ -42,7 +42,7 @@ public class AccountCreationProcess {
         User newUser = new User(name, email, password, newAccount.getAccountID());
 
         //Passa o novo Usuário como o dono da nova conta
-        newAccount.setiDPrimaryOwner(newUser.getUserID());
+        newAccount.setPrimaryOwnerID(newUser.getUserID());
 
         //Criando Wallet
         Wallet newWallet = new Wallet(newUser.getUserID(), 25000, "CDI/CDB");

@@ -38,12 +38,12 @@ public abstract class Asset {
         return assetTicker;
     }
 
-    public double getCurrentValeu() {
+    public double getCurrentValue() {
         return currentValue;
     }
 
-    public void setCurrentValeu(double currentValeu) {
-        this.currentValue = currentValeu;
+    public void setCurrentValue(double currentValue) {
+        this.currentValue = currentValue;
     }
 
     public String getAssetInfo() {

@@ -13,7 +13,7 @@ public class AccountRepository {
     public AccountRepository() {
         Account contaTeste = new Account(AccountType.PERSONAL);
         User usuarioTeste = new User("Teste", "teste@email.com", "123", contaTeste.getAccountID());
-        contaTeste.setiDPrimaryOwner(usuarioTeste.getUserID());
+        contaTeste.setPrimaryOwnerID(usuarioTeste.getUserID());
         UserRepository.addUserOnDatabase(usuarioTeste);
 
         accountsDatabase.add(contaTeste);

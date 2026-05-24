@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class Account {
     private String accountID;
-    private String iDprimaryOwner;
+    private String primaryOwnerID;
     private AccountStatus accountStatus;
     private AccountType accountType;
     private List<User> users = new ArrayList<>();
@@ -37,12 +37,12 @@ public class Account {
         }
     }
 
-    public void setiDPrimaryOwner(String userID) {
-        this.iDprimaryOwner = userID;
+    public void setPrimaryOwnerID(String userID) {
+        this.primaryOwnerID = userID;
     }
 
-    public String getiDPrimaryOwner() {
-        return iDprimaryOwner;
+    public String getPrimaryOwnerID() {
+        return primaryOwnerID;
     }
     public void setAccountID(String accountID) {
         this.accountID = accountID;

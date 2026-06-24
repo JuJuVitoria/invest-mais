@@ -47,6 +47,7 @@ public class AccountCreationProcess {
         //Criando Wallet
         Wallet newWallet = new Wallet(newUser.getUserID(), 25000, "CDI/CDB");
         Wallet newWallet2 = new Wallet(newUser.getUserID(), 10000, "Fundos");
+        Wallet newWallet3 = new Wallet(newUser.getUserID(), 9000, "Criptomoedas");
 
         //Para salvar no banco de dados improvisado
         userDatabase.addUserOnDatabase(newUser);
@@ -55,6 +56,7 @@ public class AccountCreationProcess {
 
         walletDatabase.addWalletOnDatabase(newWallet);
         walletDatabase.addWalletOnDatabase(newWallet2);
+        walletDatabase.addWalletOnDatabase(newWallet3);
 
         System.out.println("Conta " + type + " criada com sucesso!");
     }

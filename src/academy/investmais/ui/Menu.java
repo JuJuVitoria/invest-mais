@@ -2,6 +2,7 @@ package academy.investmais.ui;
 
 import academy.investmais.enums.AccountType;
 import academy.investmais.model.people.Wallet;
+import academy.investmais.model.people.User;
 import academy.investmais.repository.AccountRepository;
 import academy.investmais.repository.AssetRepository;
 import academy.investmais.repository.UserRepository;
@@ -20,7 +21,8 @@ public class Menu {
             1 - Para exibir o menu novamente
             2 - Consultar Saldo
             3 - Realizar Investimento
-            4 - Logout
+            4 - Gerar Relatório de Ativos
+            5 - Logout
             0 - Encerrar aplicação
             Escolha uma opção:
             
@@ -157,6 +159,12 @@ public class Menu {
         });
     }
 
+    private void generateReport(User user) {
+        System.out.println("Digite o nome do arquivo para continuar:");
+        var filename = scanner.next();
+        this.walletDatabase.writeReport(filename, user);
+    }
+
     private void displayAuthMenu() {
         while (!auth.isAuthenticated() && option != 0) {
             System.out.println(authMenu);
@@ -205,6 +213,10 @@ public class Menu {
                 System.out.println(mainMenu);
                 break;
             case 4:
+                generateReport(auth.getLoggedUser());
+                System.out.println(mainMenu);
+                break;
+            case 5:
                 System.out.println("Desconectando usuário...");
                 auth.logout();
                 displayAuthMenu();

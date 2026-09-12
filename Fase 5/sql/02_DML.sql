@@ -1,10 +1,3 @@
--- INVEST MAIS - FASE 5
--- DML: INSERT, UPDATE, DELETE e SELECT
--- Dados de teste coerentes com o modelo da Fase 4.
-
--- ============================================================
--- INSERT
--- ============================================================
 
 INSERT INTO ACCOUNT_TYPE (code, name, maxUsers)
 VALUES (0, 'PERSONAL', 1);

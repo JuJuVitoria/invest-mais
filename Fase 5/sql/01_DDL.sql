@@ -1,11 +1,4 @@
--- INVEST MAIS - FASE 5
--- DDL: CREATE, ALTER e DROP
--- Baseado no MER e no Dicionário de Dados da Fase 4.
--- Oracle Database / FIAP
 
--- ============================================================
--- DROP - executar antes do CREATE quando for recriar o modelo
--- ============================================================
 BEGIN EXECUTE IMMEDIATE 'DROP TABLE WALLET_ASSET CASCADE CONSTRAINTS'; EXCEPTION WHEN OTHERS THEN NULL; END;
 /
 BEGIN EXECUTE IMMEDIATE 'DROP TABLE REAL_ESTATE_FUNDS_ASSET CASCADE CONSTRAINTS'; EXCEPTION WHEN OTHERS THEN NULL; END;
@@ -33,7 +26,6 @@ BEGIN EXECUTE IMMEDIATE 'DROP TABLE ACCOUNT_TYPE CASCADE CONSTRAINTS'; EXCEPTION
 
 -- ============================================================
 -- CREATE - tabelas
--- UUID do modelo é armazenado como VARCHAR2(36) no Oracle.
 -- ============================================================
 
 CREATE TABLE ACCOUNT_TYPE (
@@ -132,9 +124,7 @@ CREATE TABLE WALLET_ASSET (
 );
 
 -- ============================================================
--- ALTER - relacionamento ACCOUNT -> USER
--- O ALTER é necessário porque ACCOUNT e USER possuem referência
--- entre si.
+-- ALTER - relacionamento ACCOUNT -> USER.
 -- ============================================================
 ALTER TABLE ACCOUNT
     ADD CONSTRAINT fk_account_primary_owner

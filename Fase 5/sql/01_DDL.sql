@@ -1,0 +1,145 @@
+-- INVEST MAIS - FASE 5
+-- DDL: CREATE, ALTER e DROP
+-- Baseado no MER e no Dicionário de Dados da Fase 4.
+-- Oracle Database / FIAP
+
+-- ============================================================
+-- DROP - executar antes do CREATE quando for recriar o modelo
+-- ============================================================
+BEGIN EXECUTE IMMEDIATE 'DROP TABLE WALLET_ASSET CASCADE CONSTRAINTS'; EXCEPTION WHEN OTHERS THEN NULL; END;
+/
+BEGIN EXECUTE IMMEDIATE 'DROP TABLE REAL_ESTATE_FUNDS_ASSET CASCADE CONSTRAINTS'; EXCEPTION WHEN OTHERS THEN NULL; END;
+/
+BEGIN EXECUTE IMMEDIATE 'DROP TABLE FIXED_INCOME_ASSET CASCADE CONSTRAINTS'; EXCEPTION WHEN OTHERS THEN NULL; END;
+/
+BEGIN EXECUTE IMMEDIATE 'DROP TABLE STOCK_ASSET CASCADE CONSTRAINTS'; EXCEPTION WHEN OTHERS THEN NULL; END;
+/
+BEGIN EXECUTE IMMEDIATE 'DROP TABLE CRYPTO_ASSET CASCADE CONSTRAINTS'; EXCEPTION WHEN OTHERS THEN NULL; END;
+/
+BEGIN EXECUTE IMMEDIATE 'DROP TABLE ASSET CASCADE CONSTRAINTS'; EXCEPTION WHEN OTHERS THEN NULL; END;
+/
+BEGIN EXECUTE IMMEDIATE 'DROP TABLE WALLET CASCADE CONSTRAINTS'; EXCEPTION WHEN OTHERS THEN NULL; END;
+/
+BEGIN EXECUTE IMMEDIATE 'DROP TABLE WALLET_CATEGORY CASCADE CONSTRAINTS'; EXCEPTION WHEN OTHERS THEN NULL; END;
+/
+BEGIN EXECUTE IMMEDIATE 'DROP TABLE "USER" CASCADE CONSTRAINTS'; EXCEPTION WHEN OTHERS THEN NULL; END;
+/
+BEGIN EXECUTE IMMEDIATE 'DROP TABLE ACCOUNT CASCADE CONSTRAINTS'; EXCEPTION WHEN OTHERS THEN NULL; END;
+/
+BEGIN EXECUTE IMMEDIATE 'DROP TABLE ACCOUNT_STATUS CASCADE CONSTRAINTS'; EXCEPTION WHEN OTHERS THEN NULL; END;
+/
+BEGIN EXECUTE IMMEDIATE 'DROP TABLE ACCOUNT_TYPE CASCADE CONSTRAINTS'; EXCEPTION WHEN OTHERS THEN NULL; END;
+/
+
+-- ============================================================
+-- CREATE - tabelas
+-- UUID do modelo é armazenado como VARCHAR2(36) no Oracle.
+-- ============================================================
+
+CREATE TABLE ACCOUNT_TYPE (
+    code     NUMBER(10) CONSTRAINT pk_account_type PRIMARY KEY,
+    name     VARCHAR2(50) NOT NULL,
+    maxUsers NUMBER(10) NOT NULL
+);
+
+CREATE TABLE ACCOUNT_STATUS (
+    code NUMBER(10) CONSTRAINT pk_account_status PRIMARY KEY,
+    name VARCHAR2(50) NOT NULL
+);
+
+CREATE TABLE ACCOUNT (
+    accountID         VARCHAR2(36) CONSTRAINT pk_account PRIMARY KEY,
+    idPrimaryOwner   VARCHAR2(36),
+    accountTypeCode  NUMBER(10) NOT NULL,
+    accountStatusCode NUMBER(10) NOT NULL,
+    CONSTRAINT fk_account_type
+        FOREIGN KEY (accountTypeCode) REFERENCES ACCOUNT_TYPE(code),
+    CONSTRAINT fk_account_status
+        FOREIGN KEY (accountStatusCode) REFERENCES ACCOUNT_STATUS(code)
+);
+
+CREATE TABLE "USER" (
+    userID    VARCHAR2(36) CONSTRAINT pk_user PRIMARY KEY,
+    accountID VARCHAR2(36) NOT NULL,
+    name      VARCHAR2(100) NOT NULL,
+    email     VARCHAR2(150) NOT NULL,
+    password  VARCHAR2(255) NOT NULL,
+    CONSTRAINT fk_user_account
+        FOREIGN KEY (accountID) REFERENCES ACCOUNT(accountID)
+);
+
+CREATE TABLE WALLET_CATEGORY (
+    categoryID NUMBER(10) CONSTRAINT pk_wallet_category PRIMARY KEY,
+    name       VARCHAR2(100) NOT NULL
+);
+
+CREATE TABLE WALLET (
+    walletID    VARCHAR2(36) CONSTRAINT pk_wallet PRIMARY KEY,
+    CategoryID  NUMBER(10) NOT NULL,
+    userID      VARCHAR2(36) NOT NULL,
+    name        VARCHAR2(100) NOT NULL,
+    totalBalance NUMBER(19,0) NOT NULL,
+    CONSTRAINT fk_wallet_category
+        FOREIGN KEY (CategoryID) REFERENCES WALLET_CATEGORY(categoryID),
+    CONSTRAINT fk_wallet_user
+        FOREIGN KEY (userID) REFERENCES "USER"(userID)
+);
+
+CREATE TABLE ASSET (
+    assetID      VARCHAR2(36) CONSTRAINT pk_asset PRIMARY KEY,
+    assetName    VARCHAR2(100) NOT NULL,
+    assetTicker  VARCHAR2(20) NOT NULL,
+    currentValue BINARY_DOUBLE NOT NULL,
+    assetType    VARCHAR2(30) NOT NULL,
+    CONSTRAINT ck_asset_type
+        CHECK (assetType IN ('CRYPTO', 'STOCK', 'FIXED_INCOME', 'REAL_ESTATE'))
+);
+
+CREATE TABLE CRYPTO_ASSET (
+    assetID    VARCHAR2(36) CONSTRAINT pk_crypto_asset PRIMARY KEY,
+    blockchain VARCHAR2(100) NOT NULL,
+    CONSTRAINT fk_crypto_asset
+        FOREIGN KEY (assetID) REFERENCES ASSET(assetID)
+);
+
+CREATE TABLE STOCK_ASSET (
+    assetID VARCHAR2(36) CONSTRAINT pk_stock_asset PRIMARY KEY,
+    CONSTRAINT fk_stock_asset
+        FOREIGN KEY (assetID) REFERENCES ASSET(assetID)
+);
+
+CREATE TABLE FIXED_INCOME_ASSET (
+    assetID VARCHAR2(36) CONSTRAINT pk_fixed_income_asset PRIMARY KEY,
+    CONSTRAINT fk_fixed_income_asset
+        FOREIGN KEY (assetID) REFERENCES ASSET(assetID)
+);
+
+CREATE TABLE REAL_ESTATE_FUNDS_ASSET (
+    assetID VARCHAR2(36) CONSTRAINT pk_real_estate_asset PRIMARY KEY,
+    CONSTRAINT fk_real_estate_asset
+        FOREIGN KEY (assetID) REFERENCES ASSET(assetID)
+);
+
+CREATE TABLE WALLET_ASSET (
+    walletID VARCHAR2(36),
+    assetID  VARCHAR2(36),
+    quantity BINARY_DOUBLE NOT NULL,
+    CONSTRAINT pk_wallet_asset PRIMARY KEY (walletID, assetID),
+    CONSTRAINT fk_wallet_asset_wallet
+        FOREIGN KEY (walletID) REFERENCES WALLET(walletID),
+    CONSTRAINT fk_wallet_asset_asset
+        FOREIGN KEY (assetID) REFERENCES ASSET(assetID)
+);
+
+-- ============================================================
+-- ALTER - relacionamento ACCOUNT -> USER
+-- O ALTER é necessário porque ACCOUNT e USER possuem referência
+-- entre si.
+-- ============================================================
+ALTER TABLE ACCOUNT
+    ADD CONSTRAINT fk_account_primary_owner
+    FOREIGN KEY (idPrimaryOwner) REFERENCES "USER"(userID);
+
+-- Índices auxiliares para FKs mais consultadas
+CREATE INDEX ix_wallet_user ON WALLET(userID);
+CREATE INDEX ix_user_account ON "USER"(accountID);

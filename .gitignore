@@ -1,0 +1,8 @@
+.idea/
+out/
+tools-out/
+*.iml
+*.class
+target/
+.cursor/
+*.local.xml
